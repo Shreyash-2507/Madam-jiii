@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For Madam Jiii ❤️</title>
+  <!-- Beautiful Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-color: #fff5f5;
+      --accent-red: #ff5e7e;
+      --accent-blue: #4a90e2;
+      --text-dark: #4a3b32;
+      --cute-font: 'Fredoka', sans-serif;
+      --letter-font: 'Quicksand', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      font-family: var(--cute-font);
+      color: var(--text-dark);
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Screen Management & Ultra-Smooth Transitions */
+    .page {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(1.02) translateY(5px);
+      transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), 
+                  transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+      will-change: opacity, transform;
+      padding: 20px;
+      z-index: 2;
+    }
+
+    .page.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1) translateY(0);
+    }
+
+    /* Background Canvas Layer for Flowers */
+    #canvas-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* PAGE 1: Lock Pattern Keypad */
+    .lock-container {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      border-radius: 30px;
+      box-shadow: 0 15px 35px rgba(255, 94, 126, 0.15);
+      text-align: center;
+      max-width: 340px;
+      width: 100%;
+    }
+
+    .lock-title {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: var(--accent-red);
+      letter-spacing: 0.5px;
+    }
+
+    .password-dots {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .dot {
+      width: 16px;
+      height: 16px;
+      border: 2px solid #ffd0d6;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .dot.filled {
+      background: var(--accent-red);
+      border-color: var(--accent-red);
+      transform: scale(1.15);
+    }
+
+    .dot.error {
+      background: #ff3333;
+      border-color: #ff3333;
+      animation: shake 0.3s ease;
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .key {
+      background: white;
+      border: none;
+      border-radius: 50%;
+      width: 65px;
+      height: 65px;
+      font-family: var(--cute-font);
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.1s ease, background-color 0.2s ease;
+      margin: 0 auto;
+    }
+
+    .key:active {
+      transform: scale(0.9);
+      background-color: #fff0f2;
+    }
+
+    .key-status {
+      grid-column: span 3;
+      font-size: 1.1rem;
+      height: 24px;
+      margin-top: 10px;
+      color: #2ec4b6;
+      font-weight: 600;
+    }
+
+    /* PAGE 2: Postbox Area */
+    .postbox-header {
+      font-size: 2.2rem;
+      margin-bottom: 30px;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      animation: gentle-bounce 2s ease-in-out infinite alternate;
+    }
+
+    .postbox-wrapper {
+      position: relative;
+      cursor: pointer;
+    }
+
+    /* Pure CSS Cute Postbox */
+    .postbox {
+      width: 140px;
+      height: 190px;
+      background: #e63946;
+      border-radius: 70px 70px 20px 20px;
+      position: relative;
+      box-shadow: 0 15px 30px rgba(230, 57, 70, 0.3);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .postbox-wrapper:hover .postbox {
+      transform: scale(1.04);
+    }
+
+    .postbox::before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: 20px;
+      width: 100px;
+      height: 15px;
+      background: #2b2d42;
+      border-radius: 5px;
+    }
+
+    .postbox::after {
+      content: 'MAIL';
+      position: absolute;
+      top: 75px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+    }
+
+    .postbox-door {
+      position: absolute;
+      bottom: 20px;
+      left: 35px;
+      width: 70px;
+      height: 60px;
+      border: 3px solid #b71c1c;
+      border-radius: 10px 10px 0 0;
+    }
+
+    .tap-hint {
+      margin-top: 30px;
+      font-size: 1.1rem;
+      color: #a08585;
+      opacity: 0.8;
+      animation: pulse 1.5s infinite;
+    }
+
+    /* Flying Letters Particle Styling */
+    .flying-letter {
+      position: absolute;
+      font-size: 2.5rem;
+      pointer-events: none;
+      z-index: 10;
+      will-change: transform, opacity;
+    }
+
+    /* PAGES 3 & 4: Letter Containers */
+    .letter-container {
+      background: #ffffff;
+      max-width: 550px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 40px 35px;
+      border-radius: 24px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.04);
+      font-family: var(--letter-font);
+      line-height: 1.7;
+      font-size: 1.08rem;
+      white-space: pre-line;
+      color: #55413c;
+      text-align: left;
+      border-left: 6px solid var(--accent-red);
+    }
+
+    /* Scrollbar Styling for Letter */
+    .letter-container::-webkit-scrollbar {
+      width: 6px;
+    }
+    .letter-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .letter-container::-webkit-scrollbar-thumb {
+      background: #ffd0d6;
+      border-radius: 10px;
+    }
+
+    .next-btn {
+      margin-top: 25px;
+      background: var(--accent-red);
+      color: white;
+      border: none;
+      padding: 12px 35px;
+      border-radius: 50px;
+      font-family: var(--cute-font);
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(255, 94, 126, 0.3);
+      transition: transform 0.2s, background-color 0.2s;
+    }
+
+    .next-btn:hover {
+      background: #ff4569;
+      transform: translateY(-2px);
+    }
+    .next-btn:active {
+      transform: translateY(0);
+    }
+
+    /* PAGE 5: Final Proclamation */
+    .final-declaration {
+      font-size: 3.5rem;
+      font-weight: 600;
+      color: var(--accent-red);
+      text-align: center;
+      text-shadow: 0 4px 12px rgba(255, 94, 126, 0.2);
+      animation: hyper-heartbeat 1.2s infinite alternate cubic-bezier(0.215, 0.610, 0.355, 1);
+    }
+
+    /* Animations System */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+    @keyframes gentle-bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-10px); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.9; }
+    }
+    @keyframes hyper-heartbeat {
+      0% { transform: scale(0.95); }
+      100% { transform: scale(1.08); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background layer for smooth blooming flower simulations -->
+  <div id="canvas-container">
+    <canvas id="flowerCanvas"></canvas>
+  </div>
+
+  <!-- PAGE 1: Secure Lock Screen -->
+  <div class="page active" id="page-lock">
+    <div class="lock-container">
+      <div class="lock-title">Enter Passcode ✨</div>
+      <div class="password-dots">
+        <div class="dot" id="dot-0"></div>
+        <div class="dot" id="dot-1"></div>
+        <div class="dot" id="dot-2"></div>
+        <div class="dot" id="dot-3"></div>
+      </div>
+      <div class="keypad">
+        <button class="key" onclick="pressKey(1)">1</button>
+        <button class="key" onclick="pressKey(2)">2</button>
+        <button class="key" onclick="pressKey(3)">3</button>
+        <button class="key" onclick="pressKey(4)">4</button>
+        <button class="key" onclick="pressKey(5)">5</button>
+        <button class="key" onclick="pressKey(6)">6</button>
+        <button class="key" onclick="pressKey(7)">7</button>
+        <button class="key" onclick="pressKey(8) || true">8</button>
+        <button class="key" onclick="pressKey(9)">9</button>
+        <button class="key" style="font-size: 1rem; color: #a08585;" onclick="clearPin()">Clear</button>
+        <button class="key" onclick="pressKey(0)">0</button>
+        <button class="key" style="visibility: hidden;"></button>
+        <div class="key-status" id="lock-status"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 2: Red Mailbox/Postbox Interactive Screen -->
+  <div class="page" id="page-postbox" onclick="triggerLetterBurst(event)">
+    <div class="postbox-header">To madam jiii ❤️</div>
+    <div class="postbox-wrapper">
+      <div class="postbox">
+        <div class="postbox-door"></div>
+      </div>
+    </div>
+    <div class="tap-hint">Tap anywhere on the screen!</div>
+  </div>
+
+  <!-- PAGE 3: Letter Section - Part 1 -->
+  <div class="page" id="page-letter-1">
+    <div class="letter-container">
+      Heyyyy cutieee 😁
+
+      I'm so happyy I met you. You're the besttt. Even when we don't talk always know that I love you so so much. I'll stay with you through everything especially when it's tough. I love seeing you happy smiling and laughing. 
+      
+      My favourite part of the day is waiting for your call and I wish it'll be you hugging me when I come from work. You're amazing cutie pie. Your smile your expressions, everything makes me so happy. Wish I could hug you all the time and wake up with your cutie pie face infront of me. 
+      
+      I won't leave you just cause I worry so much. Oditini if you ever think like that again. You can cry infront of me and talk about stuff you don't wanna tell others. I'll always listen even when I'm tired. Your happiness will always be my first priority.
+    </div>
+    <button class="next-btn" onclick="navigateToPage('page-letter-2')">Read More ✨</button>
+  </div>
+
+  <!-- PAGE 4: Letter Section - Part 2 -->
+  <div class="page" id="page-letter-2">
+    <div class="letter-container">
+      Staying beside you fills me with happiness. Ahhh that day when you kissed continuosly it made so happyyy. I love you so so so much stuti. If I could I would give you the world. I'll try my best to fulfil your dreams and make you the happiest. 
+
+      Somedays may not be as good as the others. The weather might change, cities might change, everyone around us might change but my love for you will remain the same. Tell me when you're sad and want to tell something. I'll sit next to you hold your hand and support you. Sorry for the times I've made you sad. Thank you for being mine. I never expected that we would be so close. You're my everything. I can't imagine living without you. 
+
+      That's it for now. There'll always be things to tell and I will tell them dw. 
+      Time ge uta thinnu baby. Neer kudi. Khushiyag iru. Jinke nodtha road cross madbeda. Hushar ag iru. Take care.
+
+      I LOVE YOU STUTI ❤️ ❤️ ❤️ 
+      Ondh dhina free iru nam ibrudh madhve ge 😝. 
+
+      Byeeeeee golgappa 😘 
+      YOU'RE MY SWEET LIL BABYYYY. Even when we're 80 yrs old I'll call you baby only 😋.
+    </div>
+    <button class="next-btn" onclick="navigateToPage('page-final')">Next ❤️</button>
+  </div>
+
+  <!-- PAGE 5: Ultimate Proclamation -->
+  <div class="page" id="page-final">
+    <div class="final-declaration">I LOVE YOU BABY</div>
+  </div>
+
+  <script>
+    /* Global Navigation Helper */
+    function navigateToPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+    }
+
+    /* Passcode Logic */
+    const TARGET_PIN = "2425";
+    let inputPin = "";
+
+    function pressKey(num) {
+      if (inputPin.length >= 4) return;
+      inputPin += num;
+      updateDots();
+
+      if (inputPin.length === 4) {
+        if (inputPin === TARGET_PIN) {
+          document.getElementById('lock-status').innerText = "Password correct";
+          startMassiveFlowerBloom();
+          setTimeout(() => {
+            navigateToPage('page-postbox');
+          }, 2000);
+        } else {
+          flashError();
+        }
+      }
+    }
+
+    function clearPin() {
+      inputPin = "";
+      updateDots();
+    }
+
+    function updateDots() {
+      for (let i = 0; i < 4; i++) {
+        const dot = document.getElementById(`dot-${i}`);
+        dot.className = "dot";
+        if (i < inputPin.length) dot.classList.add('filled');
+      }
+    }
+
+    function flashError() {
+      for (let i = 0; i < 4; i++) {
+        document.getElementById(`dot-${i}`).classList.add('error');
+      }
+      setTimeout(() => {
+        clearPin();
+      }, 550);
+    }
+
+    /* Postbox Screen Interactive Flying Letters */
+    let burstTaps = 0;
+    function triggerLetterBurst(e) {
+      burstTaps++;
+      const emojiOptions = ['✉️', '❤️', '💌', '🌹', '💖', '✨'];
+      const postboxEl = document.querySelector('.postbox');
+      const rect = postboxEl.getBoundingClientRect();
+      
+      // Calculate coordinates from center of postbox
+      const startX = rect.left + rect.width / 2;
+      const startY = rect.top + rect.height / 3;
+
+      for (let i = 0; i < 12; i++) {
+        const letter = document.createElement('div');
+        letter.className = 'flying-letter';
+        letter.innerText = emojiOptions[Math.floor(Math.random() * emojiOptions.length)];
+        letter.style.left = `${startX}px`;
+        letter.style.top = `${startY}px`;
+        document.body.appendChild(letter);
+
+        // Generate smooth trajectories spanning outward across the screen
+        const angle = Math.random() * Math.PI * 2;
+        const velocity = 8 + Math.random() * 12;
+        const destinationX = Math.cos(angle) * (window.innerWidth * 0.6) * Math.random();
+        const destinationY = Math.sin(angle) * (window.innerHeight * 0.6) * Math.random() - 100;
+        const rotation = Math.random() * 720 - 360;
+        const scaleEnd = 1 + Math.random() * 2;
+
+        const animation = letter.animate([
+          { transform: 'translate(-50%, -50%) scale(0.3) rotate(0deg)', opacity: 1 },
+          { transform: `translate(calc(-50% + ${destinationX}px), calc(-50% + ${destinationY}px)) scale(${scaleEnd}) rotate(${rotation}deg)`, opacity: 0 }
+        ], {
+          duration: 1800 + Math.random() * 800,
+          easing: 'cubic-bezier(0.1, 0.8, 0.25, 1)',
+          fill: 'forwards'
+        });
+
+        animation.onfinish = () => letter.remove();
+      }
+
+      // Automatically advance to the letter after a few clicks
+      if (burstTaps >= 4) {
+        burstTaps = -100; // block duplicate transitions
+        setTimeout(() => {
+          navigateToPage('page-letter-1');
+        }, 1000);
+      }
+    }
+
+    /* Hardware-Accelerated Fluid Flower Canvas System */
+    const canvas = document.getElementById('flowerCanvas');
+    const ctx = canvas.getContext('2d');
+    let flowers = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class BloomingFlower {
+      constructor(x, y, maxRadius) {
+        this.x = x;
+        this.y = y;
+        this.currentRadius = 0;
+        this.maxRadius = maxRadius;
+        this.growthSpeed = 1.2 + Math.random() * 2;
+        this.petals = 5 + Math.floor(Math.random() * 4);
+        this.rotationAngle = Math.random() * Math.PI;
+        this.rotationSpeed = (Math.random() - 0.5) * 0.01;
+        
+        // Dynamic blending between deep scarlet reds, magenta, violet, and electric sapphire blues
+        const isRedDominant = Math.random() > 0.45;
+        if (isRedDominant) {
+          this.color1 = `rgba(${220 + Math.floor(Math.random()*35)}, ${40 + Math.floor(Math.random()*40)}, ${80 + Math.floor(Math.random()*40)}, 0.25)`;
+          this.color2 = `rgba(${130 + Math.floor(Math.random()*40)}, 20, ${180 + Math.floor(Math.random()*50)}, 0.03)`;
+        } else {
+          this.color1 = `rgba(${30 + Math.floor(Math.random()*40)}, ${100 + Math.floor(Math.random()*50)}, ${220 + Math.floor(Math.random()*35)}, 0.25)`;
+          this.color2 = `rgba(${100 + Math.floor(Math.random()*40)}, 15, ${150 + Math.floor(Math.random()*50)}, 0.03)`;
+        }
+      }
+
+      update() {
+        if (this.currentRadius < this.maxRadius) {
+          // Smooth deceleration curve for physical blooming feel
+          let diff = this.maxRadius - this.currentRadius;
+          this.currentRadius += diff * 0.035 + 0.1;
+        }
+        this.rotationAngle += this.rotationSpeed;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotationAngle);
+        
+        // Multi-layered petal synthesis using overlay composition methods
+        ctx.globalCompositeOperation = 'multiply';
+
+        for (let j = 0; j < 3; j++) { // Three layers of inner petals
+          const layerScale = 1 - (j * 0.25);
+          const currentLayerRadius = this.currentRadius * layerScale;
+
+          for (let i = 0; i < this.petals; i++) {
+            ctx.rotate((Math.PI * 2) / this.petals);
+            ctx.beginPath();
+            
+            // Build perfect parametric petal curves
+            ctx.moveTo(0, 0);
+            ctx.bezierCurveTo(
+              -currentLayerRadius / 2, -currentLayerRadius / 2,
+              -currentLayerRadius / 3, -currentLayerRadius,
+              0, -currentLayerRadius
+            );
+            ctx.bezierCurveTo(
+              currentLayerRadius / 3, -currentLayerRadius,
+              currentLayerRadius / 2, -currentLayerRadius / 2,
+              0, 0
+            );
+            
+            // Rich color fill
+            const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, currentLayerRadius);
+            gradient.addColorStop(0, this.color1);
+            gradient.addColorStop(1, this.color2);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+          }
+        }
+        ctx.restore();
+      }
+    }
+
+    function startMassiveFlowerBloom() {
+      // Periodic automatic continuous spawning of blooming flower fields
+      const bloomInterval = setInterval(() => {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        const size = 80 + Math.random() * 120;
+        flowers.push(new BloomingFlower(x, y, size));
+      }, 70);
+
+      // Ambient system generation for final page states
+      setTimeout(() => {
+        setInterval(() => {
+          if (flowers.length < 150) {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height;
+            const size = 60 + Math.random() * 100;
+            flowers.push(new BloomingFlower(x, y, size));
+          }
+        }, 400);
+      }, 5000);
+    }
+
+    function animateCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      flowers.forEach(flower => {
+        flower.update();
+        flower.draw();
+      });
+
+      requestAnimationFrame(animateCanvas);
+    }
+    requestAnimationFrame(animateCanvas);
+  </script>
+</body>
+</html>
